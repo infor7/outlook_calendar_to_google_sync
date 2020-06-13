@@ -1,0 +1,5 @@
+src/credentials.json
+venv/*
+src/outlook_dump
+src/token.pickle
+.idea/
