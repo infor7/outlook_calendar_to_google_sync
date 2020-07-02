@@ -64,5 +64,8 @@ class OutlookDownloader:
 
 
 if __name__ == '__main__':
-    od = OutlookDownloader()
-    od.create_file_with_outlook_events()
+    try:
+        od = OutlookDownloader()
+        od.create_file_with_outlook_events()
+    except Exception as e:
+        logging.error("Error occurs: {}".format(e))

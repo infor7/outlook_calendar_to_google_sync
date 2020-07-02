@@ -8,6 +8,7 @@ from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from tzlocal import get_localzone
+from googleapiclient.errors import HttpError
 
 logging.basicConfig(format='%(asctime)s %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
@@ -38,9 +39,19 @@ class GoogleCalendarFeeder:
     def create_events(self):
         calendar_id = os.environ['GOOGLE_CALENDAR']
 
-        events = self.service.events().list(calendarId=calendar_id).execute()
-        for event in events['items']:
-            self.service.events().delete(calendarId=calendar_id, eventId=event['id']).execute()
+        page_token = None
+        while True:
+            events = self.service.events().list(calendarId=calendar_id, pageToken=page_token).execute()
+            for event in events['items']:
+                logging.info("Evens to deletion: {}".format(event['summary']))
+                try:
+                    self.service.events().delete(calendarId=calendar_id, eventId=event['id']).execute()
+                except HttpError as e:
+                    logging.error("Cannot delete event: {}. Error message: {}".format(event['summary'], e))
+
+            page_token = events.get('nextPageToken')
+            if not page_token:
+                break
 
         body_of_events = self.create_body_of_events()
 
@@ -49,7 +60,6 @@ class GoogleCalendarFeeder:
             logging.info("Event {} added to calendar".format(body_of_event['summary']))
 
     def create_body_of_events(self):
-        event_list = []
         with open(self.full_path + '/outlook_dump', 'r') as fh:
             json_events = json.loads(fh.read())
         tz = get_localzone()
@@ -73,5 +83,10 @@ class GoogleCalendarFeeder:
 
 
 if __name__ == '__main__':
-    gcf = GoogleCalendarFeeder()
-    gcf.create_events()
+    try:
+        gcf = GoogleCalendarFeeder()
+        gcf.create_events()
+    except Exception as e:
+        logging.error("Error occurs: {}".format(e))
+
+
