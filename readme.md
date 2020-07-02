@@ -1,6 +1,6 @@
 # For who is that software
 
-Container allows to automatically synchronization of outlook calendar to google calendar. The software has been created to ommit limitations made by too strict security policy which blocks sync from outlook calendar to google calendar.
+Container automatically synchronize outlook calendar to google calendar. The software has been created to omit limitations made by too strict security policy which blocks sync from outlook calendar to google calendar.
 
 
 # Quickstart
