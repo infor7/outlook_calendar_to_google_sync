@@ -21,7 +21,7 @@ export GOOGLE_CALENDAR=<calendar-id>@group.calendar.google.com`
 6. Build Docker
 `docker build --build-arg proxy=<optional-proxy> -t outlook_google_calendar .`
 8. Run docker
-`docker run --name outlook_google -e OUTLOOK_EMAIL=<email> -e OUTLOOK_PASSWORD=<password> -e OUTLOOK_PROXY=<optional-proxy> -e GOOGLE_PROXY=<optional-proxy> -e GOOGLE_CALENDAR=<calendar-id>@group.calendar.google.com -t -d outlook_google_calendar --restart always`
+`docker run --name outlook_google -e OUTLOOK_EMAIL=<email> -e OUTLOOK_PASSWORD=<password> -e OUTLOOK_PROXY=<optional-proxy> -e GOOGLE_PROXY=<optional-proxy> -e GOOGLE_CALENDAR=<calendar-id>@group.calendar.google.com -t -d  --restart always outlook_google_calendar`
 
 # Developer guide
 1. Create virtual env 
